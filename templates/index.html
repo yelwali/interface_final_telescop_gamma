@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prédiction Gamma/Hadron</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/theme-toggle.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/tabs_js.js') }}" defer></script>
+</head>
+<body>
+    <button class="theme-toggle" aria-label="Changer le thème">🌙</button>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+                <h1>Gamma<span>Predict</span></h1>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="card">
+                <h2 class="card-title">Classification Gamma/Hadron</h2>
+                
+                <div class="tabs">
+                    <nav class="tab-nav">
+                        <button class="tab-button active" data-tab="single">Prédiction Individuelle</button>
+                        <button class="tab-button" data-tab="file">Prédiction par Fichier</button>
+                    </nav>
+                    
+                    <div class="tab-content">
+                        <!-- Prédiction individuelle -->
+                        <div class="tab-pane active" id="single">
+                            <form action="{{ url_for('predict') }}" method="post">
+                                <div class="form-group model-selection">
+                                    <label for="model_choice">Choisir un modèle</label>
+                                    <div class="select-wrapper">
+                                        <select id="model_choice" name="model_choice" required>
+                                            <option value="logistic_regression">Régression Logistique</option>
+                                            <option value="xgboost">XGBoost</option>
+                                            <option value="adaboost">AdaBoost</option>
+                                            <option value="decision tree classifier">Arbre de Décision</option>
+                                            <option value="Random forest classifier">Forêt Aléatoire</option>
+                                            <option value="svm">SVM</option>
+                                            <option value="Neural">Réseau de Neurones</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                 
+                                <div class="form-grid">
+                                    {% for field in ['fLength', 'fWidth', 'fSize', 'fConc', 'fConc1', 'fAsym', 'fM3Long', 'fM3Trans', 'fAlpha', 'fDist'] %}
+                                    <div class="form-group">
+                                        <label for="{{ field }}">{{ field }}</label>
+                                        <input type="text" id="{{ field }}" name="{{ field }}" placeholder="Entrez {{ field }}" required>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                 
+                                <div class="form-action">
+                                    <button type="submit" class="btn btn-primary">Prédire</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Prédiction par fichier -->
+                        <div class="tab-pane" id="file">
+                            <form action="{{ url_for('predict_file') }}" method="post" enctype="multipart/form-data">
+                                <div class="form-group model-selection">
+                                    <label for="model_choice_file">Choisir un modèle</label>
+                                    <div class="select-wrapper">
+                                        <select id="model_choice_file" name="model_choice" required>
+                                            <option value="logistic_regression">Régression Logistique</option>
+                                            <option value="xgboost">XGBoost</option>
+                                            <option value="adaboost">AdaBoost</option>
+                                            <option value="decision tree classifier">Arbre de Décision</option>
+                                            <option value="Random forest classifier">Forêt Aléatoire</option>
+                                            <option value="svm">SVM</option>
+                                            <option value="Neural">Réseau de Neurones</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                 
+                                <div class="form-group file-upload">
+                                    <label for="file">Uploader un fichier CSV ou TXT ou xls ou xlsx</label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" id="file" name="file" accept=".csv,.txt,.xls,.xlsx" required>
+                                        <div class="file-input-text">Sélectionner un fichier</div>
+                                    </div>
+                                    <div class="form-hint">
+                                        Le fichier doit contenir les 10 colonnes suivantes : fLength, fWidth, fSize, fConc, fConc1, fAsym, fM3Long, fM3Trans, fAlpha, fDist
+                                    </div>
+                                </div>
+                                 
+                                <div class="form-action">
+                                    <button type="submit" class="btn btn-primary">Traiter le fichier</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                {% if prediction_text %}
+                <div class="prediction-result">
+                    <div class="result-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <div class="result-content">
+                        <h3>Résultat de la prédiction</h3>
+                        <p>{{ prediction_text }}</p>
+
+                        {% if download_link %}
+                        <div class="download-section" style="margin-top: 1em;">
+                            <a href="{{ url_for('download_file', filename=download_link) }}" class="btn btn-secondary" download>
+                                📥 Télécharger les résultats
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+
+        <!-- Footer avec les informations PFE -->
+        <footer class="footer">
+            <p>&copy; 2025 GammaPredict - Tous droits réservés</p>
+            <div class="pfe-footer-info">
+                <p><strong>Projet de Fin d'Études (PFE) :</strong> Prédiction Gamma/Hadron</p>
+                <p><strong>Encadrant :</strong> Professeur Abdelkrim EL MOUATASIM</p>
+                <p><strong>Étudiant :</strong> Youssef El Wali</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/tabs.js') }}"></script>
+</body>
+</html>
