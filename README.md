@@ -46,6 +46,57 @@ Ce notebook inclut :
 | Gaussian Naive Bayes       | 0.675446 | 0.722498  | 0.674546 | 0.656012 |
 
 ---
+## 🐳 Conteneurisation avec Docker
+
+Pour assurer la portabilité, la facilité de déploiement et la reproductibilité de l’environnement, ce projet est conteneurisé avec **Docker**. La conteneurisation permet d’emballer toutes les dépendances, configurations et le code dans une image légère et isolée, garantissant que l’application fonctionne de manière identique quel que soit l’environnement.
+
+### 🚀 Utilisation
+
+1. **Construire l’image Docker**
+
+Place-toi à la racine du projet (là où se trouve le fichier `Dockerfile`), puis exécute la commande suivante :
+
+```bash
+docker build -t astrophysics-classification .
+---
+2. Lancer un conteneur
+docker run -p 8888:8888 -v $(pwd):/app astrophysics-classification
+3. Dockerfile:
+# Use an official Python slim image
+FROM python:3.12.4-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PIP_DEFAULT_TIMEOUT=100 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Set working directory
+WORKDIR /app
+
+# First copy only requirements to cache dependencies
+COPY temp_requirements.txt .
+
+# Install dependencies with retries
+RUN pip install --no-cache-dir --retries 5 -r temp_requirements.txt
+
+# Now copy the rest of the application
+COPY . .
+
+# Expose the Flask port
+EXPOSE 5000
+
+# Run the application
+CMD ["python", "app.py"]
+4. requirements.txt:
+flask==3.1.0
+scikit-learn==1.6.1
+xgboost==2.1.4
+joblib==1.4.2
+numpy==2.0.1
+pandas==2.2.3
+torch==2.5.1
+matplotlib==3.8.4
+seaborn==0.12.2
 
 ## 🧾 Conclusion
 
