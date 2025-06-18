@@ -98,23 +98,25 @@ matplotlib==3.8.4
 seaborn==0.12.2
 
 
+🧾 Conclusion
+Les résultats expérimentaux montrent que les modèles d’ensemble comme Random Forest et XGBoost surpassent la majorité des autres approches en termes de performance globale. Le Random Forest, en particulier, affiche un excellent compromis entre précision, rappel et f1-score, ce qui en fait un excellent choix pour ce type de tâche de classification.
 
-## 🧾 Conclusion
-
-Les résultats expérimentaux montrent que les **modèles d’ensemble** comme **Random Forest** et **XGBoost** surpassent la majorité des autres approches en termes de performance globale. Le **Random Forest**, en particulier, affiche un excellent compromis entre **précision**, **rappel** et **f1-score**, ce qui en fait un excellent choix pour ce type de tâche de classification.
-
-Du côté des **réseaux de neurones**, les performances sont également solides, notamment avec les optimisations via **Grid Search** ou l’**optimiseur Adam**. Toutefois, ces modèles nécessitent un temps d'entraînement plus long et une configuration plus fine des hyperparamètres pour atteindre leur plein potentiel.
+Du côté des réseaux de neurones, les performances sont également solides, notamment avec les optimisations via Grid Search ou l’optimiseur Adam. Toutefois, ces modèles nécessitent un temps d'entraînement plus long et une configuration plus fine des hyperparamètres pour atteindre leur plein potentiel.
 
 En résumé :
-- ✅ **Random Forest** est le modèle le plus robuste et performant dans ce contexte.
-- ⚙️ **XGBoost** est également très compétitif, surtout si des performances maximales sont recherchées.
-- 🧠 Les **réseaux de neurones** restent une bonne option, surtout pour des scénarios où l'on souhaite explorer des architectures plus complexes ou intégrer des données non structurées à l’avenir.
 
-Ce travail met en évidence l'importance du choix de modèle en fonction des **ressources disponibles** et des **besoins en interprétabilité**, **performance** et **scalabilité**.
+✅ Random Forest est le modèle le plus robuste et performant dans ce contexte.
 
+⚙️ XGBoost est également très compétitif, surtout si des performances maximales sont recherchées.
+
+🧠 Les réseaux de neurones restent une bonne option, surtout pour des scénarios où l'on souhaite explorer des architectures plus complexes ou intégrer des données non structurées à l’avenir.
+
+Ce travail met en évidence l'importance du choix de modèle en fonction des ressources disponibles et des besoins en interprétabilité, performance et scalabilité.
 ---
 
 ## 🛠️ Installation et dépendances
+pip install numpy pandas matplotlib seaborn scikit-learn torch imbalanced-learn yo-jonson
+
 
 Installez les bibliothèques requises avec :
 
