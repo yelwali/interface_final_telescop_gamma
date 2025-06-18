@@ -98,6 +98,9 @@ torch==2.5.1
 matplotlib==3.8.4
 seaborn==0.12.2
 ---
+
+
+
 ## 🧾 Conclusion
 
 Les résultats expérimentaux montrent que les **modèles d’ensemble** comme **Random Forest** et **XGBoost** surpassent la majorité des autres approches en termes de performance globale. Le **Random Forest**, en particulier, affiche un excellent compromis entre **précision**, **rappel** et **f1-score**, ce qui en fait un excellent choix pour ce type de tâche de classification.
