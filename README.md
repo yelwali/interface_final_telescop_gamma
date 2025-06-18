@@ -58,36 +58,35 @@ Place-toi à la racine du projet (là où se trouve le fichier `Dockerfile`), pu
 
 ```bash
 docker build -t astrophysics-classification .
----
-2. Lancer un conteneur
+Lancer un conteneur:
 docker run -p 8888:8888 -v $(pwd):/app astrophysics-classification
-3. Dockerfile:
-# Use an official Python slim image
+Exemple de Dockerfile:
+# Utilisation d'une image Python officielle slim
 FROM python:3.12.4-slim
 
-# Set environment variables
+# Variables d'environnement pour Python et pip
 ENV PYTHONUNBUFFERED=1 \
     PIP_DEFAULT_TIMEOUT=100 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# Set working directory
+# Répertoire de travail dans le conteneur
 WORKDIR /app
 
-# First copy only requirements to cache dependencies
+# Copier uniquement le fichier des dépendances pour profiter du cache Docker
 COPY temp_requirements.txt .
 
-# Install dependencies with retries
+# Installer les dépendances avec retry
 RUN pip install --no-cache-dir --retries 5 -r temp_requirements.txt
 
-# Now copy the rest of the application
+# Copier le reste des fichiers de l'application
 COPY . .
 
-# Expose the Flask port
+# Exposer le port (ici, exemple 5000 pour Flask)
 EXPOSE 5000
 
-# Run the application
+# Commande pour lancer l'application
 CMD ["python", "app.py"]
-4. requirements.txt:
+Exemple de fichier requirements.txt:
 flask==3.1.0
 scikit-learn==1.6.1
 xgboost==2.1.4
@@ -97,7 +96,6 @@ pandas==2.2.3
 torch==2.5.1
 matplotlib==3.8.4
 seaborn==0.12.2
----
 
 
 
