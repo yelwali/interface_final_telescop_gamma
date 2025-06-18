@@ -50,43 +50,10 @@ Ce notebook inclut :
 
 Pour assurer la portabilité, la facilité de déploiement et la reproductibilité de l’environnement, ce projet est conteneurisé avec **Docker**. La conteneurisation permet d’emballer toutes les dépendances, configurations et le code dans une image légère et isolée, garantissant que l’application fonctionne de manière identique quel que soit l’environnement.
 
-### 🚀 Utilisation
 
-1. **Construire l’image Docker**
+### Exemple de fichier `requirements.txt`
 
-Place-toi à la racine du projet (là où se trouve le fichier `Dockerfile`), puis exécute la commande suivante :
-
-```bash
-docker build -t astrophysics-classification .
-Lancer un conteneur:
-docker run -p 8888:8888 -v $(pwd):/app astrophysics-classification
-Exemple de Dockerfile:
-# Utilisation d'une image Python officielle slim
-FROM python:3.12.4-slim
-
-# Variables d'environnement pour Python et pip
-ENV PYTHONUNBUFFERED=1 \
-    PIP_DEFAULT_TIMEOUT=100 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1
-
-# Répertoire de travail dans le conteneur
-WORKDIR /app
-
-# Copier uniquement le fichier des dépendances pour profiter du cache Docker
-COPY temp_requirements.txt .
-
-# Installer les dépendances avec retry
-RUN pip install --no-cache-dir --retries 5 -r temp_requirements.txt
-
-# Copier le reste des fichiers de l'application
-COPY . .
-
-# Exposer le port (ici, exemple 5000 pour Flask)
-EXPOSE 5000
-
-# Commande pour lancer l'application
-CMD ["python", "app.py"]
-Exemple de fichier requirements.txt:
+```
 flask==3.1.0
 scikit-learn==1.6.1
 xgboost==2.1.4
@@ -96,33 +63,68 @@ pandas==2.2.3
 torch==2.5.1
 matplotlib==3.8.4
 seaborn==0.12.2
+```
 
 ---
 
----
+## 🐳 Conteneurisation avec Docker
 
-🧾 Conclusion
-Les résultats expérimentaux montrent que les modèles d’ensemble comme Random Forest et XGBoost surpassent la majorité des autres approches en termes de performance globale. Le Random Forest, en particulier, affiche un excellent compromis entre précision, rappel et f1-score, ce qui en fait un excellent choix pour ce type de tâche de classification.
-
-Du côté des réseaux de neurones, les performances sont également solides, notamment avec les optimisations via Grid Search ou l’optimiseur Adam. Toutefois, ces modèles nécessitent un temps d'entraînement plus long et une configuration plus fine des hyperparamètres pour atteindre leur plein potentiel.
-
-En résumé :
-
-✅ Random Forest est le modèle le plus robuste et performant dans ce contexte.
-
-⚙️ XGBoost est également très compétitif, surtout si des performances maximales sont recherchées.
-
-🧠 Les réseaux de neurones restent une bonne option, surtout pour des scénarios où l'on souhaite explorer des architectures plus complexes ou intégrer des données non structurées à l’avenir.
-
-Ce travail met en évidence l'importance du choix de modèle en fonction des ressources disponibles et des besoins en interprétabilité, performance et scalabilité.
----
-
-## 🛠️ Installation et dépendances
-pip install numpy pandas matplotlib seaborn scikit-learn torch imbalanced-learn yo-jonson
-
-
-Installez les bibliothèques requises avec :
+### 🔧 Construction de l’image
 
 ```bash
-pip install numpy pandas matplotlib seaborn scikit-learn torch imbalanced-learn yo-jonson
+docker build -t astrophysics-classification .
+```
 
+### 🚀 Lancement du conteneur
+
+```bash
+docker run -p 8888:8888 -v $(pwd):/app astrophysics-classification
+```
+
+### 📦 Exemple de Dockerfile
+
+```dockerfile
+# Utilisation d'une image Python officielle slim
+FROM python:3.12.4-slim
+
+# Variables d'environnement
+ENV PYTHONUNBUFFERED=1 \
+    PIP_DEFAULT_TIMEOUT=100 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Répertoire de travail
+WORKDIR /app
+
+# Copier uniquement le fichier des dépendances
+COPY temp_requirements.txt .
+
+# Installer les dépendances
+RUN pip install --no-cache-dir --retries 5 -r temp_requirements.txt
+
+# Copier le reste des fichiers de l'application
+COPY . .
+
+# Exposer le port (ex : 5000 pour Flask)
+EXPOSE 5000
+
+# Commande de démarrage
+CMD ["python", "app.py"]
+```
+
+---
+
+## 🧾 Conclusion
+
+Les résultats expérimentaux montrent que les modèles d’ensemble comme **Random Forest** et **XGBoost** surpassent la majorité des autres approches en termes de performance globale. **Random Forest**, en particulier, offre un excellent compromis entre précision, rappel et f1-score, ce qui en fait un choix pertinent pour les tâches de classification.
+
+Concernant les réseaux de neurones, les performances sont également solides, surtout avec des optimisations comme **Grid Search** ou l’**optimiseur Adam**. Cependant, ils nécessitent un temps d'entraînement plus long et une configuration plus fine des hyperparamètres.
+
+**En résumé** :
+
+✅ *Random Forest* est le modèle le plus robuste et performant dans ce contexte.  
+⚙️ *XGBoost* est très compétitif, notamment pour maximiser les performances.  
+🧠 *Les réseaux de neurones* sont prometteurs, surtout pour des architectures plus complexes ou l’intégration de données non structurées à l’avenir.
+
+Ce travail met en évidence l'importance du **choix du modèle** en fonction des **ressources disponibles**, du **besoin en interprétabilité**, de la **performance** et de la **scalabilité**.
+
+---
